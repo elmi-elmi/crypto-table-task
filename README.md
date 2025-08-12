@@ -1,63 +1,132 @@
+# Crypto Table Task
 
+A modern cryptocurrency data table application built with Next.js 15, featuring real-time data fetching, offline storage, and a responsive UI.
 
+## 🚀 Features
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+- **Responsive Table**: Sortable, filterable, and paginated data table
+- **Modern UI**: Clean, accessible interface with Tailwind CSS
+- **Type Safety**: Full TypeScript implementation
+- **State Management**: Zustand for efficient state management
 
-## Getting Started
+## 📁 Project Structure
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+crypto-table-task/
+├── app/                          # Next.js App Router
+│   ├── (table)/                  # Route group for table pages
+│   │   ├── layout.tsx           # Layout for table routes
+│   │   ├── table/               # Main table page
+│   │   └── table2/              # Alternative table page
+│   ├── api/                     # API routes
+│   │   └── cryptos/             # Crypto data API endpoint
+│   ├── globals.css              # Global styles
+│   ├── layout.tsx               # Root layout
+│   ├── page.tsx                 # Home page
+│   └── providers.tsx            # React Query provider
+├── components/                   # Reusable components
+│   ├── crypto-table/            # Table-specific components
+│   │   ├── columns.tsx          # Table column definitions
+│   │   └── DataTable.tsx        # Main data table component
+│   └── ui/                      # UI components (shadcn/ui)
+│       ├── badge.tsx
+│       ├── button.tsx
+│       ├── checkbox.tsx
+│       ├── dropdown-menu.tsx
+│       ├── input.tsx
+│       ├── pagination.tsx
+│       ├── skeleton.tsx
+│       └── table.tsx
+├── hooks/                       # Custom React hooks
+│   └── useCrypto.ts            # Crypto data fetching hook
+├── lib/                         # Utility libraries
+│   ├── constants.ts            # Application constants
+│   └── utils.ts                # Utility functions
+├── services/                    # External services
+│   ├── api.ts                  # API service layer
+│   └── idb.ts                  # IndexedDB service
+├── store/                       # State management
+│   └── crypto.ts               # Zustand store
+├── types/                       # TypeScript type definitions
+│   └── crypto.ts               # Crypto data types
+└── public/                      # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Libraries & Technologies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Framework
+- **Next.js 15** - React framework with App Router for server-side rendering and routing
+- **React 19** - UI library with latest features and performance improvements
+- **TypeScript** - Type safety and better developer experience
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### UI & Styling
+- **Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+- **shadcn/ui** - High-quality, accessible UI components built on Radix UI
+- **Lucide React** - Beautiful, customizable icons
+- **class-variance-authority** - Type-safe component variants
+- **clsx & tailwind-merge** - Conditional class name utilities
 
-## Code Formatting
+### Data Management
+- **@tanstack/react-query** - Powerful data fetching, caching, and synchronization
+- **@tanstack/react-table** - Headless table library for complex data tables
+- **Zustand** - Lightweight state management with minimal boilerplate
 
-This project uses Prettier with Tailwind CSS class sorting for consistent code formatting:
+### Data Storage & Validation
+- **IndexedDB (idb)** - Client-side database for offline data storage
+- **Zod** - TypeScript-first schema validation
 
-```bash
-# Format all files
-npm run format
+### Development Tools
+- **ESLint** - Code linting and quality enforcement
+- **Prettier** - Code formatting with Tailwind CSS class sorting
+- **Turbopack** - Fast bundler for development
 
-# Check formatting without making changes
-npm run format:check
+## 🎯 Why These Libraries?
 
-# Run ESLint
-npm run lint
+### **Next.js 15** - Modern React framework with excellent performance, SEO, and developer experience
+### **Tailwind CSS** - Rapid UI development with consistent design system
+### **shadcn/ui** - Accessible, customizable components without vendor lock-in
+### **React Query** - Efficient data fetching with automatic caching and background updates
+### **Zustand** - Simple state management without the complexity of Redux
+### **IndexedDB** - Reliable offline storage for better user experience
+### **TypeScript** - Catch errors early and improve code maintainability
 
-# Fix ESLint issues automatically
-npm run lint:fix
-```
+## 🚀 Getting Started
 
-The project includes:
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-- **Prettier** with `prettier-plugin-tailwindcss` for automatic Tailwind CSS class sorting
-- **ESLint** configuration for code quality
-- **VS Code settings** for automatic formatting on save
+2. **Run development server:**
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+3. **Open [http://localhost:3000](http://localhost:3000)** to view the application
 
-To learn more about Next.js, take a look at the following resources:
+## 📝 Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Fix ESLint issues automatically
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Code Quality
 
-## Deploy on Vercel
+This project uses:
+- **Prettier** with Tailwind CSS class sorting for consistent formatting
+- **ESLint** for code quality and best practices
+- **TypeScript** for type safety
+- **Import sorting** for organized imports
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📱 Features Overview
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Real-time Data**: Live cryptocurrency prices from external APIs
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Offline Capability**: Data persists when offline using IndexedDB
+- **Advanced Table**: Sorting, filtering, pagination, and column visibility
+- **Loading States**: Skeleton loaders and loading indicators
+- **Error Handling**: Graceful error states and retry mechanisms
