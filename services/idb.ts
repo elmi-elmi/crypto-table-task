@@ -55,7 +55,6 @@ class IDBService {
   }
 
   async setCryptos(cryptos: ApiResponse): Promise<void> {
-    console.log("set setCryptos start", cryptos.data.cryptoCurrencyList.length);
     const db = this.initDB();
     if (!db) return;
 
@@ -88,7 +87,6 @@ class IDBService {
     lastUpdated: number;
     totalCount: number;
   } | null> {
-    console.log("getMetadata start");
 
     const db = this.initDB();
     if (!db) return null;
