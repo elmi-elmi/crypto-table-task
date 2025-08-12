@@ -1,3 +1,5 @@
+### deployed on vercel: crypto-tabel[ https://crypto-table-task-qoix.vercel.app/
+ ]
 # Crypto Table Task
 
 A modern cryptocurrency data table application built with Next.js 15, featuring real-time data fetching, offline storage, and a responsive UI.
