@@ -1,129 +1,69 @@
+import { z } from 'zod';
 
-export interface CryptoCurrency {
-    id: number;
-    name: string;
-    symbol: string;
-    slug: string;
-    cmcRank: number;
-    marketPairCount: number;
-    circulatingSupply: number;
-    totalSupply: number;
-    maxSupply: number | null;
-    ath: number;
-    atl: number;
-    high24h: number;
-    low24h: number;
-    isActive: number;
-    isAudited: boolean;
-    dateAdded: string;
-    quotes: {
-        [key: string]: {
-            price: number;
-            volume24h: number;
-            volume7d: number;
-            volume30d: number;
-            marketCap: number;
-            marketCapByTotalSupply: number;
-            percentChange1h: number;
-            percentChange24h: number;
-            percentChange7d: number;
-            percentChange30d: number;
-            percentChange60d: number;
-            percentChange90d: number;
-            fullyDilluttedMarketCap: number;
-            marketCapByTotalSupplyYesterday: number;
-            volume24hYesterday: number;
-            dominance: number;
-            turnover: number;
-            ytdPriceChangePercentage: number;
-            lastUpdated: string;
-        };
-    };
-}
+export const QuoteSchema = z.object({
+    name: z.string(),
+    price: z.number(),
+    volume24h: z.number(),
+    volume7d: z.number(),
+    volume30d: z.number(),
+    marketCap: z.number(),
+    selfReportedMarketCap: z.number(),
+    percentChange1h: z.number(),
+    percentChange24h: z.number(),
+    percentChange7d: z.number(),
+    percentChange30d: z.number(),
+    percentChange60d: z.number(),
+    percentChange90d: z.number(),
+    lastUpdated: z.string(),
+    fullyDilluttedMarketCap: z.number(),
+    marketCapByTotalSupply: z.number(),
+    dominance: z.number(),
+    turnover: z.number().optional().nullable(),
+    ytdPriceChangePercentage: z.number(),
+    percentChange1y: z.number(),
+});
 
-export interface ApiResponse {
-    data: {
-        cryptoCurrencyList: CryptoCurrency[];
-        totalCount: number;
-    };
-    status: {
-        timestamp: string;
-        errorCode: string;
-        errorMessage: string | null;
-        elapsed: string;
-        creditCount: number;
-    };
-}
+export const CryptoCurrencySchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    symbol: z.string(),
+    slug: z.string(),
+    cmcRank: z.number(),
+    marketPairCount: z.number(),
+    circulatingSupply: z.number(),
+    selfReportedCirculatingSupply: z.number(),
+    totalSupply: z.number(),
+    maxSupply: z.number().nullable().optional(),
+    ath: z.number(),
+    atl: z.number(),
+    high24h: z.number(),
+    low24h: z.number(),
+    isActive: z.number(),
+    lastUpdated: z.string(),
+    dateAdded: z.string(),
+    quotes: z.array(QuoteSchema),
+    isAudited: z.boolean().optional(),
+    auditInfoList: z.array(z.unknown()).optional(),
+    badges: z.array(z.unknown()).optional(),
+});
 
-export interface PaginationState {
-    page: number;
-    limit: number;
-    total: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-}
+export const StatusSchema = z.object({
+    timestamp: z.string(),
+    error_code: z.string(),
+    error_message: z.string(),
+    elapsed: z.string(),
+    credit_count: z.number(),
+});
 
-export interface CryptoFilters {
-    search: string;
-    sortBy: 'rank' | 'name' | 'price' | 'marketCap' | 'volume24h' | 'percentChange24h';
-    sortOrder: 'asc' | 'desc';
-    convert: 'USD' | 'BTC' | 'ETH';
-}
+export const ApiResponseSchema = z.object({
+    data: z.object({
+        cryptoCurrencyList: z.array(CryptoCurrencySchema),
+        totalCount: z.string(),
+    }),
+    status: StatusSchema,
+});
 
-export interface CacheEntry {
-    data: CryptoCurrency[];
-    timestamp: number;
-    page: number;
-    limit: number;
-}
-
-export interface CryptoStore {
-    // Data
-    cryptos: CryptoCurrency[];
-    loading: boolean;
-    error: string | null;
-
-    // Pagination
-    pagination: PaginationState;
-
-    // Filters
-    filters: CryptoFilters;
-
-    // Actions
-    setCryptos: (cryptos: CryptoCurrency[]) => void;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string | null) => void;
-    setPagination: (pagination: Partial<PaginationState>) => void;
-    setFilters: (filters: Partial<CryptoFilters>) => void;
-    resetFilters: () => void;
-}
-
-export interface UIStore {
-    // Theme
-    isDarkMode: boolean;
-
-    // Layout
-    isMobile: boolean;
-    sidebarOpen: boolean;
-
-    // Loading states
-    isInitialLoading: boolean;
-    isLoadingMore: boolean;
-
-    // Actions
-    toggleDarkMode: () => void;
-    setIsMobile: (isMobile: boolean) => void;
-    setSidebarOpen: (open: boolean) => void;
-    setInitialLoading: (loading: boolean) => void;
-    setLoadingMore: (loading: boolean) => void;
-}
-
-export type SortDirection = 'asc' | 'desc' | false;
-
-export interface TableColumn {
-    key: string;
-    title: string;
-    sortable: boolean;
-    width?: string;
-    align?: 'left' | 'center' | 'right';
-}
+export type Quote = z.infer<typeof QuoteSchema>;
+export type CryptoCurrency = z.infer<typeof CryptoCurrencySchema>;
+export type Status = z.infer<typeof StatusSchema>;
+export type ApiResponse = z.infer<typeof ApiResponseSchema>;
