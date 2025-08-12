@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
-import {Github, Linkedin, Mail} from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,48 +24,45 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    console.log('root layout render....')
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen items-center justify-center`}
+        className={`${geistSans.variable} ${geistMono.variable} flex h-screen flex-col items-center justify-center antialiased`}
       >
-      <Providers>
-          {children}
-      </Providers>
+        <Providers>{children}</Providers>
 
-      <footer className=" flex gap-6 flex-wrap items-center justify-center">
+        <footer className="flex flex-wrap items-center justify-center gap-6">
           <a
-              href="https://www.linkedin.com/in/elmialireza/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              aria-label="LinkedIn"
+            href="https://www.linkedin.com/in/elmialireza/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+            aria-label="LinkedIn"
           >
-              <Linkedin className="w-4 h-4" aria-hidden />
-              elmialireza
+            <Linkedin className="h-4 w-4" aria-hidden />
+            elmialireza
           </a>
 
           <a
-              href="https://github.com/elmi-elmi/crypto-table-task"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              aria-label="GitHub"
+            href="https://github.com/elmi-elmi/crypto-table-task"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+            aria-label="GitHub"
           >
-              <Github className="w-4 h-4" aria-hidden />
-              elmi-elmi
+            <Github className="h-4 w-4" aria-hidden />
+            elmi-elmi
           </a>
 
           <a
-              href="mailto:shahrokhelmi@gmail.com"
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              aria-label="Email"
+            href="mailto:shahrokhelmi@gmail.com"
+            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+            aria-label="Email"
           >
-              <Mail className="w-4 h-4" aria-hidden />
-              Email
+            <Mail className="h-4 w-4" aria-hidden />
+            Email
           </a>
-      </footer>
+        </footer>
       </body>
     </html>
   );

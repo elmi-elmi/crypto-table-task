@@ -1,94 +1,101 @@
-'use client';
+"use client";
 
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import {ApiResponse, CryptoCurrency} from '@/types/crypto';
+import { openDB, DBSchema, IDBPDatabase } from "idb";
+import { ApiResponse, CryptoCurrency } from "@/types/crypto";
 
 interface CryptoDBSchema extends DBSchema {
-    cryptos: {
-        key: number;
-        value: CryptoCurrency & { cachedAt: number };
-        indexes: { 'by-rank': number };
-    };
-    metadata: {
-        key: string;
-        value: { lastUpdated: number; totalCount: number };
-    };
+  cryptos: {
+    key: number;
+    value: CryptoCurrency & { cachedAt: number };
+    indexes: { "by-rank": number };
+  };
+  metadata: {
+    key: string;
+    value: { lastUpdated: number; totalCount: number };
+  };
 }
 
 class IDBService {
-    private db: Promise<IDBPDatabase<CryptoDBSchema>> | null = null;
+  private db: Promise<IDBPDatabase<CryptoDBSchema>> | null = null;
 
-    private initDB() {
-        if (typeof window === 'undefined') {
-            return null;
-        }
-
-        if (!this.db) {
-            this.db = openDB<CryptoDBSchema>('CryptoDB', 1, {
-                upgrade(db) {
-                    const cryptoStore = db.createObjectStore('cryptos', { keyPath: 'id' });
-                    cryptoStore.createIndex('by-rank', 'cmcRank');
-                    db.createObjectStore('metadata');
-                },
-            });
-        }
-
-        return this.db;
+  private initDB() {
+    if (typeof window === "undefined") {
+      return null;
     }
 
-    async getCryptos(start = 1, limit = 10): Promise<CryptoCurrency[]> {
-
-        const db = this.initDB();
-        if (!db) return [];
-
-        const dbInstance = await db;
-        const tx = dbInstance.transaction('cryptos', 'readonly');
-        const index = tx.store.index('by-rank');
-
-        const cryptos = await index.getAll(IDBKeyRange.bound(start, start + limit - 1), limit);
-
-        return cryptos.map(({ cachedAt, ...crypto }) => crypto);
-
+    if (!this.db) {
+      this.db = openDB<CryptoDBSchema>("CryptoDB", 1, {
+        upgrade(db) {
+          const cryptoStore = db.createObjectStore("cryptos", {
+            keyPath: "id",
+          });
+          cryptoStore.createIndex("by-rank", "cmcRank");
+          db.createObjectStore("metadata");
+        },
+      });
     }
 
-    async setCryptos(cryptos: ApiResponse): Promise<void> {
-        console.log('set setCryptos start', cryptos.data.cryptoCurrencyList.length)
-        const db = this.initDB();
-        if (!db) return;
+    return this.db;
+  }
 
-        const dbInstance = await db;
-        const tx = dbInstance.transaction(['cryptos', 'metadata'], 'readwrite');
+  async getCryptos(start = 1, limit = 10): Promise<CryptoCurrency[]> {
+    const db = this.initDB();
+    if (!db) return [];
 
-        const cryptoStore = tx.objectStore('cryptos');
-        const metadataStore = tx.objectStore('metadata');
+    const dbInstance = await db;
+    const tx = dbInstance.transaction("cryptos", "readonly");
+    const index = tx.store.index("by-rank");
 
-        const now = Date.now();
+    const cryptos = await index.getAll(
+      IDBKeyRange.bound(start, start + limit - 1),
+      limit
+    );
 
-        await Promise.all(
-            cryptos.data.cryptoCurrencyList.map(c => cryptoStore.put({ ...c, cachedAt: now }))
-        );
+    return cryptos.map(({ cachedAt, ...crypto }) => crypto);
+  }
 
+  async setCryptos(cryptos: ApiResponse): Promise<void> {
+    console.log("set setCryptos start", cryptos.data.cryptoCurrencyList.length);
+    const db = this.initDB();
+    if (!db) return;
 
-        await metadataStore.put( {
-            lastUpdated: now,
-            totalCount: +cryptos.data.totalCount,
-        },'cache-info',);
+    const dbInstance = await db;
+    const tx = dbInstance.transaction(["cryptos", "metadata"], "readwrite");
 
-        await tx.done;
+    const cryptoStore = tx.objectStore("cryptos");
+    const metadataStore = tx.objectStore("metadata");
 
+    const now = Date.now();
 
-    }
+    await Promise.all(
+      cryptos.data.cryptoCurrencyList.map((c) =>
+        cryptoStore.put({ ...c, cachedAt: now })
+      )
+    );
 
-    async getMetadata(): Promise<{ lastUpdated: number; totalCount: number } | null> {
-        console.log('getMetadata start')
+    await metadataStore.put(
+      {
+        lastUpdated: now,
+        totalCount: +cryptos.data.totalCount,
+      },
+      "cache-info"
+    );
 
-        const db = this.initDB();
-        if (!db) return null;
+    await tx.done;
+  }
 
-        const dbInstance = await db;
-        return await dbInstance.get('metadata', 'cache-info') || null;
-    }
+  async getMetadata(): Promise<{
+    lastUpdated: number;
+    totalCount: number;
+  } | null> {
+    console.log("getMetadata start");
 
+    const db = this.initDB();
+    if (!db) return null;
+
+    const dbInstance = await db;
+    return (await dbInstance.get("metadata", "cache-info")) || null;
+  }
 }
 
 export const idbService = new IDBService();
