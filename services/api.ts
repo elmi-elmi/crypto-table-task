@@ -2,11 +2,11 @@ import { ApiResponse, ApiResponseSchema } from "@/types/crypto";
 
 class ApiService {
   private readonly baseUrl =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/cryptos";
+    process.env.NEXT_PUBLIC_API_URL ;
 
   async fetchCryptos(start = 1, limit = 100): Promise<ApiResponse> {
     const response = await fetch(
-      `${this.baseUrl}?start=${start}&limit=${limit}`,
+      `${this.baseUrl}/api/cryptos?start=${start}&limit=${limit}`,
       {
         next: {
           revalidate: 300,
